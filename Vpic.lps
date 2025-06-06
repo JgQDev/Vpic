@@ -1,0 +1,256 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CONFIG>
+  <ProjectSession>
+    <Version Value="12"/>
+    <BuildModes Active="Windows_x86_64"/>
+    <Units>
+      <Unit>
+        <Filename Value="Vpic.lpr"/>
+        <IsPartOfProject Value="True"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="4"/>
+        <CursorPos X="41" Y="23"/>
+        <UsageCount Value="80"/>
+      </Unit>
+      <Unit>
+        <Filename Value="main.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="Form1"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Form"/>
+        <IsVisibleTab Value="True"/>
+        <TopLine Value="202"/>
+        <CursorPos X="38" Y="226"/>
+        <UsageCount Value="80"/>
+        <Loaded Value="True"/>
+        <LoadedDesigner Value="True"/>
+      </Unit>
+      <Unit>
+        <Filename Value="credits.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="Form2"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Form"/>
+        <UnitName Value="Credits"/>
+        <EditorIndex Value="1"/>
+        <CursorPos X="20" Y="17"/>
+        <UsageCount Value="30"/>
+        <Loaded Value="True"/>
+        <LoadedDesigner Value="True"/>
+      </Unit>
+      <Unit>
+        <Filename Value="../../../../fpcupdeluxe/lazarus/lcl/controls.pp"/>
+        <UnitName Value="Controls"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="237"/>
+        <CursorPos X="36" Y="248"/>
+        <UsageCount Value="8"/>
+      </Unit>
+      <Unit>
+        <Filename Value="../../../../fpcupdeluxe/fpcsrc/rtl/objpas/classes/classesh.inc"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="1979"/>
+        <CursorPos X="14" Y="1988"/>
+        <UsageCount Value="8"/>
+      </Unit>
+      <Unit>
+        <Filename Value="../../../../fpcupdeluxe/lazarus/lcl/include/control.inc"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="4533"/>
+        <CursorPos Y="4544"/>
+        <UsageCount Value="7"/>
+      </Unit>
+      <Unit>
+        <Filename Value="../../../../fpcupdeluxe/fpcsrc/rtl/inc/typshrdh.inc"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="89"/>
+        <CursorPos X="3" Y="101"/>
+        <UsageCount Value="7"/>
+      </Unit>
+      <Unit>
+        <Filename Value="../../../../fpcupdeluxe/lazarus/lcl/lclmessageglue.pas"/>
+        <UnitName Value="LCLMessageGlue"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="107"/>
+        <CursorPos Y="118"/>
+        <UsageCount Value="8"/>
+      </Unit>
+      <Unit>
+        <Filename Value="../../../../fpcupdeluxe/lazarus/lcl/graphics.pp"/>
+        <UnitName Value="Graphics"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="1462"/>
+        <CursorPos X="3" Y="1473"/>
+        <UsageCount Value="8"/>
+      </Unit>
+      <Unit>
+        <Filename Value="../../../../fpcupdeluxe/lazarus/lcl/include/canvas.inc"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="1702"/>
+        <CursorPos Y="1713"/>
+        <UsageCount Value="8"/>
+      </Unit>
+      <Unit>
+        <Filename Value="../../../../fpcupdeluxe/ccr/bgrabitmap/bgrabitmap/bgrabitmaptypes.pas"/>
+        <UnitName Value="BGRABitmapTypes"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="1496"/>
+        <CursorPos Y="1508"/>
+        <UsageCount Value="8"/>
+      </Unit>
+      <Unit>
+        <Filename Value="../../../../fpcupdeluxe/lazarus/lcl/include/fpimagebitmap.inc"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="130"/>
+        <CursorPos Y="141"/>
+        <UsageCount Value="8"/>
+      </Unit>
+      <Unit>
+        <Filename Value="../../../../fpcupdeluxe/fpcsrc/packages/fcl-image/src/fpcanvas.pp"/>
+        <UnitName Value="FPCanvas"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="224"/>
+        <CursorPos X="45" Y="238"/>
+        <UsageCount Value="10"/>
+      </Unit>
+      <Unit>
+        <Filename Value="../../../../fpcupdeluxe/lazarus/lcl/interfaces/carbon/agl.pp"/>
+        <EditorIndex Value="-1"/>
+        <CursorPos X="65" Y="11"/>
+        <UsageCount Value="10"/>
+      </Unit>
+      <Unit>
+        <Filename Value="../../../../fpcupdeluxe/fpcsrc/packages/fcl-process/src/process.pp"/>
+        <EditorIndex Value="-1"/>
+        <UsageCount Value="10"/>
+      </Unit>
+      <Unit>
+        <Filename Value="../../../../fpcupdeluxe/fpcsrc/packages/fcl-process/src/simpleipc.pp"/>
+        <EditorIndex Value="-1"/>
+        <UsageCount Value="10"/>
+      </Unit>
+    </Units>
+    <JumpHistory HistoryIndex="28">
+      <Position>
+        <Filename Value="main.pas"/>
+        <Caret Line="345" TopLine="330"/>
+      </Position>
+      <Position>
+        <Filename Value="main.pas"/>
+        <Caret Line="346" TopLine="330"/>
+      </Position>
+      <Position>
+        <Filename Value="main.pas"/>
+        <Caret Line="347" TopLine="330"/>
+      </Position>
+      <Position>
+        <Filename Value="main.pas"/>
+        <Caret Line="343" TopLine="330"/>
+      </Position>
+      <Position>
+        <Filename Value="main.pas"/>
+        <Caret Line="344" TopLine="330"/>
+      </Position>
+      <Position>
+        <Filename Value="main.pas"/>
+        <Caret Line="345" TopLine="330"/>
+      </Position>
+      <Position>
+        <Filename Value="main.pas"/>
+        <Caret Line="346" TopLine="330"/>
+      </Position>
+      <Position>
+        <Filename Value="main.pas"/>
+        <Caret Line="347" TopLine="330"/>
+      </Position>
+      <Position>
+        <Filename Value="main.pas"/>
+        <Caret Line="343" TopLine="330"/>
+      </Position>
+      <Position>
+        <Filename Value="main.pas"/>
+        <Caret Line="344" TopLine="330"/>
+      </Position>
+      <Position>
+        <Filename Value="main.pas"/>
+        <Caret Line="345" TopLine="330"/>
+      </Position>
+      <Position>
+        <Filename Value="main.pas"/>
+        <Caret Line="346" TopLine="330"/>
+      </Position>
+      <Position>
+        <Filename Value="main.pas"/>
+        <Caret Line="347" TopLine="330"/>
+      </Position>
+      <Position>
+        <Filename Value="main.pas"/>
+        <Caret Line="343" TopLine="330"/>
+      </Position>
+      <Position>
+        <Filename Value="main.pas"/>
+        <Caret Line="344" TopLine="330"/>
+      </Position>
+      <Position>
+        <Filename Value="main.pas"/>
+        <Caret Line="345" TopLine="330"/>
+      </Position>
+      <Position>
+        <Filename Value="main.pas"/>
+        <Caret Line="346" TopLine="330"/>
+      </Position>
+      <Position>
+        <Filename Value="main.pas"/>
+        <Caret Line="347" TopLine="330"/>
+      </Position>
+      <Position>
+        <Filename Value="main.pas"/>
+        <Caret Line="343" TopLine="330"/>
+      </Position>
+      <Position>
+        <Filename Value="main.pas"/>
+        <Caret Line="344" TopLine="330"/>
+      </Position>
+      <Position>
+        <Filename Value="main.pas"/>
+        <Caret Line="345" TopLine="330"/>
+      </Position>
+      <Position>
+        <Filename Value="main.pas"/>
+        <Caret Line="346" TopLine="330"/>
+      </Position>
+      <Position>
+        <Filename Value="main.pas"/>
+        <Caret Line="347" TopLine="330"/>
+      </Position>
+      <Position>
+        <Filename Value="main.pas"/>
+        <Caret Line="338" Column="28" TopLine="329"/>
+      </Position>
+      <Position>
+        <Filename Value="main.pas"/>
+        <Caret Line="9" Column="36"/>
+      </Position>
+      <Position>
+        <Filename Value="main.pas"/>
+        <Caret Line="69" Column="15" TopLine="60"/>
+      </Position>
+      <Position>
+        <Filename Value="main.pas"/>
+        <Caret Line="149"/>
+      </Position>
+      <Position>
+        <Filename Value="main.pas"/>
+        <Caret Line="150" TopLine="130"/>
+      </Position>
+      <Position>
+        <Filename Value="main.pas"/>
+        <Caret Line="149" TopLine="129"/>
+      </Position>
+    </JumpHistory>
+    <RunParams>
+      <FormatVersion Value="2"/>
+      <Modes ActiveMode=""/>
+    </RunParams>
+  </ProjectSession>
+</CONFIG>
