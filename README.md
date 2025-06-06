@@ -7,5 +7,4 @@ A simple image viewer program written in FPC Lazarus IDE
 
 # Download Executable
 
-![Linux-x86_64](Release/Vpic_(Linux_x86_64))
-![Windows-x86_64](Release/Vpic_(Windows_x86_64).exe)
+![Link-to-Release](Release)
