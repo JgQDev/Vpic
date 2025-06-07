@@ -2076,6 +2076,7 @@ object Form1: TForm1
     Top = 296
     object OpenItem: TMenuItem
       Caption = 'Open'
+      OnClick = MM1_File_OpenClick
     end
     object Separator3: TMenuItem
       Caption = '-'
