@@ -13,6 +13,12 @@ type
   { TForm1 }
 
   TForm1 = class(TForm)
+    MaxImageSizeItem: TMenuItem;
+    WrapAroundModeItem: TMenuItem;
+    MM1_View_WrapAroundMode: TMenuItem;
+    MinImageSize: TMenuItem;
+    MM1_View_MinImageSize: TMenuItem;
+    MM1_View_MaxImageSize: TMenuItem;
     ResetItem: TMenuItem;
     OpenItem: TMenuItem;
     MM1_View_Reset: TMenuItem;
@@ -43,7 +49,10 @@ type
     procedure MM1_File_ExitClick(Sender: TObject);
     procedure MM1_File_OpenClick(Sender: TObject);
     procedure MM1_File_SaveAsClick(Sender: TObject);
+    procedure MM1_View_MaxImageSizeClick(Sender: TObject);
+    procedure MM1_View_MinImageSizeClick(Sender: TObject);
     procedure MM1_View_ResetClick(Sender: TObject);
+    procedure MM1_View_WrapAroundModeClick(Sender: TObject);
     procedure MU(Sender: TObject; Button: TMouseButton; Shift: TShiftState; X,
       Y: Integer);
     procedure MWD(Sender: TObject; Shift: TShiftState; MousePos: TPoint;
@@ -60,6 +69,10 @@ type
     procedure InitCanvas;
     procedure ResizeCanvas(const SetSize:Integer);
     procedure LoadImageAt(const FilePathName:String);
+    procedure ResizePBView;
+    procedure LoadPNGxy;
+    procedure LoadPNGxyHD;
+    procedure DrawAll(const Ix,Iy,AWidth,AHeight:Integer);
     function RR(const X:Real):Integer;
     function GetFileName:String;
   end;
@@ -68,6 +81,8 @@ var
   Form1: TForm1;
   FPN: String;
   Pic: TPicture;
+  PBView: TPortableNetworkGraphic;
+  PNGxy: TPortableNetworkGraphic;
   PBCv: TPortableNetworkGraphic;
   MDown: Boolean;
   MIx: Integer;
@@ -78,6 +93,8 @@ var
   MIwh: TPoint;
   StrParam: Boolean;
   FilePN: String;
+  boolHD:Boolean;
+  boolDAll:Boolean;
 
 implementation
 
@@ -98,7 +115,6 @@ begin
   if(OpenD.Execute=False)then Exit;
   if(FileExists(OpenD.FileName)=True)then begin
     FPN:=OpenD.FileName;
-
     try
       Pic.LoadFromFile(OpenD.FileName);
     except
@@ -114,6 +130,8 @@ begin
 
     SBar.Panels.Items[0].Text:='Directory: '+FPN;
 
+    if(boolHD=False)then LoadPNGxy
+    else LoadPNGxyHD;
     InitCanvas;
     DrawBool:=True;
   end;
@@ -125,10 +143,34 @@ begin
   if(SaveD.Execute)then Pic.SaveToFile(SaveD.FileName);
 end;
 
+procedure TForm1.MM1_View_MaxImageSizeClick(Sender: TObject);
+begin
+  if(FPN<>'')then begin
+    boolHD:=True;
+    LoadPNGxyHD;
+  end;
+  DrawBool:=True;
+end;
+
+procedure TForm1.MM1_View_MinImageSizeClick(Sender: TObject);
+begin
+  if(FPN<>'')then begin
+    boolHD:=False;
+    LoadPNGxy;
+  end;
+  DrawBool:=True;
+end;
+
 procedure TForm1.MM1_View_ResetClick(Sender: TObject);
 begin
   if(FPN<>'')then InitCanvas;
   DrawBool:=True;
+end;
+
+procedure TForm1.MM1_View_WrapAroundModeClick(Sender: TObject);
+begin
+  if(boolDAll=False)then boolDAll:=True
+  else boolDAll:=False;
 end;
 
 procedure TForm1.MU(Sender: TObject; Button: TMouseButton; Shift: TShiftState;
@@ -156,8 +198,8 @@ begin
 
   AWidth:=MIwh.X;
   AHeight:=MIwh.Y;
-  PosX:=MousePos.X;
-  PosY:=MousePos.Y;
+  PosX:=RR(((PB1.Width/2)*MousePos.X)/PB1.Width);
+  PosY:=RR(((PB1.Height/2)*MousePos.Y)/PB1.Height);
 
   ResizeCanvas(ScrollValue);
   if(MIwh.X>=MIwh.Y)then begin
@@ -184,8 +226,8 @@ begin
 
   AWidth:=MIwh.X;
   AHeight:=MIwh.Y;
-  PosX:=MousePos.X;
-  PosY:=MousePos.Y;
+  PosX:=RR(((PB1.Width/2)*MousePos.X)/PB1.Width);
+  PosY:=RR(((PB1.Height/2)*MousePos.Y)/PB1.Height);
 
   ResizeCanvas(-ScrollValue);
   if(MIwh.X>=MIwh.Y)then begin
@@ -235,14 +277,21 @@ procedure TForm1.InitPBCv;
 var
   AWidth,AHeight:Integer;
 begin
+  ResizePBView;
+  AWidth:=MIxy.X+MIwh.X;
+  AHeight:=MIxy.Y+MIwh.Y;
+
+  if(boolDAll=False)then
+    PBView.Canvas.StretchDraw(Rect(MIxy.X,MIxy.Y,AWidth,AHeight),PNGxy)
+  else
+    DrawAll(MIxy.X,MIxy.Y,MIwh.X,MIwh.Y);
+
   PBCv.SetSize(PB1.Width,PB1.Height);
 
   PBCv.Canvas.Brush.Color:=$00A36E00;
   PBCv.Canvas.FillRect(0,0,PB1.Width,PB1.Height);
 
-  AWidth:=MIxy.X+MIwh.X;
-  AHeight:=MIxy.Y+MIwh.Y;
-  PBCv.Canvas.StretchDraw(Rect(MIxy.X,MIxy.Y,AWidth,AHeight),Pic.PNG);
+  PBCv.Canvas.StretchDraw(Rect(0,0,PBCv.Width,PBCv.Height),PBView);
 end;
 
 procedure TForm1.InitCanvas;
@@ -252,18 +301,19 @@ var
   Ixy:TPoint;
   TempX,TempY:Integer;
 begin
+  ResizePBView;
   if(Pic.Width>=Pic.Height)then begin
     if(Pic.Width=0)then TempX:=1 else TempX:=Pic.Width;
-    AWidth:=PB1.Height;
-    AHeight:=RR((PB1.Height*Pic.Height)/TempX);
+    AWidth:=PBView.Height;
+    AHeight:=RR((PBView.Height*Pic.Height)/TempX);
   end else
   if(Pic.Width<Pic.Height)then begin
     if(Pic.Height=0)then TempY:=1 else TempY:=Pic.Height;
-    AWidth:=RR((PB1.Height*Pic.Width)/TempY);
-    AHeight:=PB1.Height;
+    AWidth:=RR((PBView.Height*Pic.Width)/TempY);
+    AHeight:=PBView.Height;
   end;
-  Ixy.X:=(PB1.Width div 2)-(AWidth div 2);
-  Ixy.Y:=(PB1.Height div 2)-(AHeight div 2);
+  Ixy.X:=(PBView.Width div 2)-(AWidth div 2);
+  Ixy.Y:=(PBView.Height div 2)-(AHeight div 2);
   MIxy.SetLocation(Ixy);
   MIwh.SetLocation(AWidth,AHeight);
   if(MIwh.X>=MIwh.Y)then begin
@@ -301,7 +351,6 @@ procedure TForm1.LoadImageAt(const FilePathName: String);
 begin
   if(FileExists(FilePathName)=True)then begin
     FPN:=FilePathName;
-
     try
       Pic.LoadFromFile(FilePathName);
     except
@@ -317,8 +366,67 @@ begin
 
     SBar.Panels.Items[0].Text:='Directory: '+FPN;
 
+    if(boolHD=False)then LoadPNGxy
+    else LoadPNGxyHD;
     InitCanvas;
     DrawBool:=True;
+  end;
+end;
+
+procedure TForm1.ResizePBView;
+begin
+  PBView.SetSize(RR(PB1.Width/2),RR(PB1.Height/2));
+
+  PBView.Canvas.Brush.Color:=$00A36E00;
+  PBView.Canvas.FillRect(0,0,PBView.Width,PBView.Height);
+end;
+
+procedure TForm1.LoadPNGxy;
+var
+  AWidth,AHeight:Integer;
+begin
+  if(Pic.Width>=Pic.Height)then begin
+    AWidth:=RR(((Pic.Width/2)*Pic.Width)/Pic.Width);
+    AHeight:=RR(((Pic.Height/2)*Pic.Height)/Pic.Width);
+  end else begin
+    AWidth:=RR(((Pic.Width/2)*Pic.Width)/Pic.Height);
+    AHeight:=RR(((Pic.Height/2)*Pic.Height)/Pic.Height);
+  end;
+  PNGxy.SetSize(AWidth,AHeight);
+  PNGxy.Canvas.Brush.Color:=$00A36E00;
+  PNGxy.Canvas.FillRect(0,0,AWidth,AHeight);
+  PNGxy.Canvas.StretchDraw(Rect(0,0,AWidth,AHeight),Pic.PNG);
+end;
+
+procedure TForm1.LoadPNGxyHD;
+begin
+  PNGxy.SetSize(Pic.Width,Pic.Height);
+  PNGxy.Canvas.Brush.Color:=$00A36E00;
+  PNGxy.Canvas.FillRect(0,0,Pic.Width,Pic.Height);
+  PNGxy.Canvas.StretchDraw(Rect(0,0,Pic.Width,Pic.Height),Pic.PNG);
+end;
+
+procedure TForm1.DrawAll(const Ix, Iy, AWidth, AHeight: Integer);
+var
+  AIx,AIy,RecX,RecY:Integer;
+begin
+  AIx:=Ix;
+  AIy:=Iy;
+  While(True)do begin
+    if(AIx<=0)and(AIy<=0)then Break;
+    if(AIx>0)then AIx:=AIx-AWidth;
+    if(AIy>0)then AIy:=AIy-AHeight;
+  end;
+  RecX:=AIx;
+  RecY:=AIy;
+  While(True)do begin
+    if(RecX>PBView.Width)then begin
+      RecY:=RecY+AHeight;
+      RecX:=AIx;
+    end;
+    if(RecY>PBView.Height)then Break;
+    PBView.Canvas.StretchDraw(Rect(RecX,RecY,RecX+AWidth,RecY+AHeight),PNGxy);
+    RecX:=RecX+AWidth;
   end;
 end;
 
@@ -345,6 +453,8 @@ procedure TForm1.FormCreate(Sender: TObject);
 begin
   FPN:='';
   Pic:=TPicture.Create;
+  PBView:=TPortableNetworkGraphic.Create;
+  PNGxy:=TPortableNetworkGraphic.Create;
   PBCv:=TPortableNetworkGraphic.Create;
   ScrollValue:=10;
   if(ParamCount>0)then begin
@@ -353,21 +463,25 @@ begin
   end else begin
     StrParam:=False;
   end;
+  boolHD:=False;
+  boolDAll:=False;
 end;
 
 procedure TForm1.FormDestroy(Sender: TObject);
 begin
   Pic.Free;
+  PBView.Free;
+  PNGxy.Free;
   PBCv.Free;
 end;
 
 procedure TForm1.MD(Sender: TObject; Button: TMouseButton; Shift: TShiftState;
   X, Y: Integer);
 begin
-  if(Button=mbMiddle)then begin
+  if(Button=mbMiddle)or(Button=mbLeft)then begin
     MDown:=True;
-    MIx:=X;
-    MIy:=Y;
+    MIx:=RR(((PB1.Width/2)*X)/PB1.Width);
+    MIy:=RR(((PB1.Height/2)*Y)/PB1.Height);
   end;
 end;
 
@@ -377,11 +491,15 @@ begin
 end;
 
 procedure TForm1.MM(Sender: TObject; Shift: TShiftState; X, Y: Integer);
+var
+  AIx,AIy:Integer;
 begin
   if(MDown=True)then begin
-    MIxy.SetLocation(MIxy.X+(X-MIx),MIxy.Y+(Y-MIy));
-    MIx:=X;
-    MIy:=Y;
+    AIx:=RR(((PB1.Width/2)*X)/PB1.Width);
+    AIy:=RR(((PB1.Height/2)*Y)/PB1.Height);
+    MIxy.SetLocation(MIxy.X+(AIx-MIx),MIxy.Y+(AIy-MIy));
+    MIx:=AIx;
+    MIy:=AIy;
     InitPBCv;
     DrawBool:=True;
   end;

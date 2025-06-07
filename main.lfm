@@ -2040,6 +2040,18 @@ object Form1: TForm1
         Caption = 'Reset View'
         OnClick = MM1_View_ResetClick
       end
+      object MM1_View_MaxImageSize: TMenuItem
+        Caption = 'Max Image Size'
+        OnClick = MM1_View_MaxImageSizeClick
+      end
+      object MM1_View_MinImageSize: TMenuItem
+        Caption = 'Min Image Size'
+        OnClick = MM1_View_MinImageSizeClick
+      end
+      object MM1_View_WrapAroundMode: TMenuItem
+        Caption = 'Wrap Around Mode'
+        OnClick = MM1_View_WrapAroundModeClick
+      end
     end
     object MM1_About: TMenuItem
       Caption = 'Info'
@@ -2071,6 +2083,18 @@ object Form1: TForm1
     object ResetItem: TMenuItem
       Caption = 'Reset View'
       OnClick = MM1_View_ResetClick
+    end
+    object MaxImageSizeItem: TMenuItem
+      Caption = 'Max Image Size'
+      OnClick = MM1_View_MaxImageSizeClick
+    end
+    object MinImageSize: TMenuItem
+      Caption = 'Min Image Size'
+      OnClick = MM1_View_MinImageSizeClick
+    end
+    object WrapAroundModeItem: TMenuItem
+      Caption = 'Wrap Around Mode'
+      OnClick = MM1_View_WrapAroundModeClick
     end
   end
   object SaveD: TSavePictureDialog
