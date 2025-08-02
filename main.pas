@@ -61,6 +61,7 @@ type
       var Handled: Boolean);
     procedure OP(Sender: TObject);
     procedure ORSize(Sender: TObject);
+    procedure PB1DblClick(Sender: TObject);
     procedure Timer1Timer(Sender: TObject);
   private
 
@@ -72,29 +73,37 @@ type
     procedure ResizePBView;
     procedure LoadPNGxy;
     procedure LoadPNGxyHD;
+    procedure MWDown(var AScrollValue,MouseX,MouseY:Integer;const ASpeed:Single);
+    procedure MWUp(var AScrollValue,MouseX,MouseY:Integer;const ASpeed:Single);
     procedure DrawAll(const Ix,Iy,AWidth,AHeight:Integer);
     function RR(const X:Real):Integer;
     function GetFileName:String;
   end;
 
 var
-  Form1: TForm1;
-  FPN: String;
-  Pic: TPicture;
-  PBView: TPortableNetworkGraphic;
-  PNGxy: TPortableNetworkGraphic;
-  PBCv: TPortableNetworkGraphic;
-  MDown: Boolean;
-  MIx: Integer;
-  MIy: Integer;
-  DrawBool: Boolean;
-  ScrollValue: Integer;
-  MIxy: TPoint;
-  MIwh: TPoint;
-  StrParam: Boolean;
-  FilePN: String;
+  Form1:TForm1;
+  FPN:String;
+  Pic:TPicture;
+  PBView:TPortableNetworkGraphic;
+  PNGxy:TPortableNetworkGraphic;
+  PBCv:TPortableNetworkGraphic;
+  MDown:Boolean;
+  MIx:Integer;
+  MIy:Integer;
+  DrawBool:Boolean;
+  ScrollValue:Integer;
+  ScrollValueP:Integer;
+  MIxy:TPoint;
+  MIwh:TPoint;
+  StrParam:Boolean;
+  FilePN:String;
   boolHD:Boolean;
   boolDAll:Boolean;
+  DoubleClickBool:Boolean;
+  ADataxy:Integer;
+  BDataxy:Integer;
+  MDIx:Integer;
+  MDIy:Integer;
 
 implementation
 
@@ -177,71 +186,19 @@ procedure TForm1.MU(Sender: TObject; Button: TMouseButton; Shift: TShiftState;
   X, Y: Integer);
 begin
   MDown:=False;
+  DoubleClickBool:=False;
 end;
 
 procedure TForm1.MWD(Sender: TObject; Shift: TShiftState; MousePos: TPoint;
   var Handled: Boolean);
-var
-  AWidth,AHeight:Integer;
-  PosX,PosY:Integer;
 begin
-  if(MIwh.X<=100)or(MIwh.Y<=100)then begin
-    While(ScrollValue<=5)do begin
-      if(MIwh.X>=MIwh.Y)then begin
-        ScrollValue:=RR(((MIwh.X*50)/MIwh.Y)*1.26);
-      end else
-      if(MIwh.X<MIwh.Y)then begin
-        ScrollValue:=RR(((MIwh.Y*50)/MIwh.X)*1.26);
-      end;
-    end;
-  end;
-
-  AWidth:=MIwh.X;
-  AHeight:=MIwh.Y;
-  PosX:=RR(((PB1.Width/2)*MousePos.X)/PB1.Width);
-  PosY:=RR(((PB1.Height/2)*MousePos.Y)/PB1.Height);
-
-  ResizeCanvas(ScrollValue);
-  if(MIwh.X>=MIwh.Y)then begin
-    ScrollValue:=RR(((MIwh.X*50)/MIwh.Y)*1.26);
-  end else
-  if(MIwh.X<MIwh.Y)then begin
-    ScrollValue:=RR(((MIwh.Y*50)/MIwh.X)*1.26);
-  end;
-
-  MIxy.X:=RR(PosX+((MIwh.X*(MIxy.X-PosX))/AWidth));
-  MIxy.Y:=RR(PosY+((MIwh.Y*(MIxy.Y-PosY))/AHeight));
-
-  InitPBCv;
-  DrawBool:=True;
+  MWDown(ScrollValue,MousePos.X,MousePos.Y,1.26);
 end;
 
 procedure TForm1.MWU(Sender: TObject; Shift: TShiftState; MousePos: TPoint;
   var Handled: Boolean);
-var
-  AWidth,AHeight:Integer;
-  PosX,PosY:Integer;
 begin
-  if(MIwh.X<100)or(MIwh.Y<100)then Exit;
-
-  AWidth:=MIwh.X;
-  AHeight:=MIwh.Y;
-  PosX:=RR(((PB1.Width/2)*MousePos.X)/PB1.Width);
-  PosY:=RR(((PB1.Height/2)*MousePos.Y)/PB1.Height);
-
-  ResizeCanvas(-ScrollValue);
-  if(MIwh.X>=MIwh.Y)then begin
-    ScrollValue:=RR(((MIwh.X*50)/MIwh.Y)/1.26);
-  end else
-  if(MIwh.X<MIwh.Y)then begin
-    ScrollValue:=RR(((MIwh.Y*50)/MIwh.X)/1.26);
-  end;
-
-  MIxy.X:=RR(PosX+((MIwh.X*(MIxy.X-PosX))/AWidth));
-  MIxy.Y:=RR(PosY+((MIwh.Y*(MIxy.Y-PosY))/AHeight));
-
-  InitPBCv;
-  DrawBool:=True;
+  MWUp(ScrollValue,MousePos.X,MousePos.Y,1.26);
 end;
 
 procedure TForm1.OP(Sender: TObject);
@@ -258,6 +215,11 @@ procedure TForm1.ORSize(Sender: TObject);
 begin
   InitPBCv;
   DrawBool:=True;
+end;
+
+procedure TForm1.PB1DblClick(Sender: TObject);
+begin
+  DoubleClickBool:=True;
 end;
 
 procedure TForm1.Timer1Timer(Sender: TObject);
@@ -406,6 +368,71 @@ begin
   PNGxy.Canvas.StretchDraw(Rect(0,0,Pic.Width,Pic.Height),Pic.PNG);
 end;
 
+procedure TForm1.MWDown(var AScrollValue, MouseX, MouseY: Integer;
+  const ASpeed: Single);
+var
+  AWidth,AHeight:Integer;
+  PosX,PosY:Integer;
+begin
+  if(MIwh.X<=100)or(MIwh.Y<=100)then begin
+    While(AScrollValue<=5)do begin
+      if(MIwh.X>=MIwh.Y)then begin
+        AScrollValue:=RR(((MIwh.X*50)/MIwh.Y)*ASpeed);
+      end else
+      if(MIwh.X<MIwh.Y)then begin
+        AScrollValue:=RR(((MIwh.Y*50)/MIwh.X)*ASpeed);
+      end;
+    end;
+  end;
+
+  AWidth:=MIwh.X;
+  AHeight:=MIwh.Y;
+  PosX:=RR(((PB1.Width/2)*MouseX)/PB1.Width);
+  PosY:=RR(((PB1.Height/2)*MouseY)/PB1.Height);
+
+  ResizeCanvas(AScrollValue);
+  if(MIwh.X>=MIwh.Y)then begin
+    AScrollValue:=RR(((MIwh.X*50)/MIwh.Y)*ASpeed);
+  end else
+  if(MIwh.X<MIwh.Y)then begin
+    AScrollValue:=RR(((MIwh.Y*50)/MIwh.X)*ASpeed);
+  end;
+
+  MIxy.X:=RR(PosX+((MIwh.X*(MIxy.X-PosX))/AWidth));
+  MIxy.Y:=RR(PosY+((MIwh.Y*(MIxy.Y-PosY))/AHeight));
+
+  InitPBCv;
+  DrawBool:=True;
+end;
+
+procedure TForm1.MWUp(var AScrollValue, MouseX, MouseY: Integer;
+  const ASpeed: Single);
+var
+  AWidth,AHeight:Integer;
+  PosX,PosY:Integer;
+begin
+  if(MIwh.X<100)or(MIwh.Y<100)then Exit;
+
+  AWidth:=MIwh.X;
+  AHeight:=MIwh.Y;
+  PosX:=RR(((PB1.Width/2)*MouseX)/PB1.Width);
+  PosY:=RR(((PB1.Height/2)*MouseY)/PB1.Height);
+
+  ResizeCanvas(-AScrollValue);
+  if(MIwh.X>=MIwh.Y)then begin
+    AScrollValue:=RR(((MIwh.X*50)/MIwh.Y)/ASpeed);
+  end else
+  if(MIwh.X<MIwh.Y)then begin
+    AScrollValue:=RR(((MIwh.Y*50)/MIwh.X)/ASpeed);
+  end;
+
+  MIxy.X:=RR(PosX+((MIwh.X*(MIxy.X-PosX))/AWidth));
+  MIxy.Y:=RR(PosY+((MIwh.Y*(MIxy.Y-PosY))/AHeight));
+
+  InitPBCv;
+  DrawBool:=True;
+end;
+
 procedure TForm1.DrawAll(const Ix, Iy, AWidth, AHeight: Integer);
 var
   AIx,AIy,RecX,RecY:Integer;
@@ -457,6 +484,9 @@ begin
   PNGxy:=TPortableNetworkGraphic.Create;
   PBCv:=TPortableNetworkGraphic.Create;
   ScrollValue:=10;
+  ScrollValueP:=10;
+  ADataxy:=0;
+  BDataxy:=0;
   if(ParamCount>0)then begin
     StrParam:=True;
     FilePN:=ParamStr(1);
@@ -465,6 +495,7 @@ begin
   end;
   boolHD:=False;
   boolDAll:=False;
+  DoubleClickBool:=False;
 end;
 
 procedure TForm1.FormDestroy(Sender: TObject);
@@ -478,22 +509,31 @@ end;
 procedure TForm1.MD(Sender: TObject; Button: TMouseButton; Shift: TShiftState;
   X, Y: Integer);
 begin
-  if(Button=mbMiddle)or(Button=mbLeft)then begin
+  if(Button=mbMiddle)or(Button=mbLeft)or(DoubleClickBool=True)then begin
     MDown:=True;
     MIx:=RR(((PB1.Width/2)*X)/PB1.Width);
     MIy:=RR(((PB1.Height/2)*Y)/PB1.Height);
+    MDIx:=RR(((PB1.Width/2)*X)/PB1.Width);
+    MDIy:=RR(((PB1.Height/2)*Y)/PB1.Height);
   end;
 end;
 
 procedure TForm1.ML(Sender: TObject);
 begin
   MDown:=False;
+  DoubleClickBool:=False;
 end;
 
 procedure TForm1.MM(Sender: TObject; Shift: TShiftState; X, Y: Integer);
 var
   AIx,AIy:Integer;
 begin
+  if(DoubleClickBool=True)then begin
+    BDataxy:=ADataxy;
+    ADataxy:=RR(((100*(X+Y))/(PB1.Width+PB1.Height))-50);
+    if(ADataxy>0)and(ADataxy=BDataxy)then MWDown(ScrollValue,MDIx,MDIy,0.5) else
+    if(ADataxy<0)and(ADataxy=BDataxy)then MWUp(ScrollValue,MDIx,MDIy,3.5);
+  end else
   if(MDown=True)then begin
     AIx:=RR(((PB1.Width/2)*X)/PB1.Width);
     AIy:=RR(((PB1.Height/2)*Y)/PB1.Height);

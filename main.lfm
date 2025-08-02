@@ -1960,6 +1960,7 @@ object Form1: TForm1
   OnDestroy = FormDestroy
   ParentDoubleBuffered = False
   Position = poDesktopCenter
+  LCLVersion = '3.4.0.0'
   WindowState = wsMaximized
   object SBar: TStatusBar
     Left = 0
@@ -2003,6 +2004,7 @@ object Form1: TForm1
       Color = 10710528
       ParentColor = False
       PopupMenu = PopM
+      OnDblClick = PB1DblClick
       OnMouseDown = MD
       OnMouseLeave = ML
       OnMouseMove = MM
